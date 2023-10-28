@@ -1,0 +1,189 @@
+<html><head>
+    <title>Kanban Board</title>
+    <style>
+      body {
+        background-color: peachpuff;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+  
+      .board {
+        display: flex;
+        justify-content: space-between;
+        width: 800px;
+      }
+  
+      .column {
+        background-color: transparent;
+        color: dark rgb(198, 11, 255);
+        border: 1px solid  rgb(75, 1, 136);
+        border-radius: 5px;
+        padding: 10px;
+        width: 280px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+      }
+  
+      .card {
+        background-color: yellow;
+        border: 1px solid rgb(122, 0, 179);
+        color: rgb(122, 0, 179);
+        padding: 5px;
+        margin: 5px 0;
+        cursor: pointer;
+      }
+  
+      .doing-card {
+        background-color: yellowgreen; /* Green-yellow background for "Doing" cards */
+        color: rgb(122, 0, 179); /* Change the text color for "Doing" cards */
+      }
+  
+      .done-card {
+        background-color: lime; /* Electric green background for "Done" cards */
+        color: rgb(122, 0, 179); /* Change the text color for "Done" cards */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="board">
+      <div class="column">
+        <h1>To-Do</h1>
+        <div id="todoColumn">
+          <!-- To-Do cards go here -->
+        </div>
+        <input type="text" id="todoInput" placeholder="Add a new task">
+        <button id="todoAddButton">Add</button>
+      </div>
+      <div class="column">
+        <h1>Doing</h1>
+        <div id="doingColumn">
+          <!-- Doing cards go here -->
+        <div class="card doing-card">ETRHERH</div><div class="card doing-card">EDWFE</div></div>
+      </div>
+      <div class="column">
+        <h1>Done</h1>
+        <div id="doneColumn">
+          <!-- Done cards go here -->
+        <div class="card done-card">qefqwfg</div><div class="card done-card">qefqf</div><div class="card done-card">serghbg</div><div class="card done-card">rgwerg</div><div class="card done-card">qweffqweff</div><div class="card done-card">4we5yh4yh</div><div class="card done-card">sdrtrt</div><div class="card done-card">sss</div><div class="card done-card">wetfg</div><div class="card done-card">IYUIGYUG</div><div class="card done-card">SXDD</div></div>
+      </div>
+    </div>
+  
+    <script>
+      const todoColumn = document.getElementById('todoColumn');
+      const doingColumn = document.getElementById('doingColumn');
+      const doneColumn = document.getElementById('doneColumn');
+      const todoInput = document.getElementById('todoInput');
+      const todoAddButton = document.getElementById('todoAddButton');
+  
+      // Load tasks from local storage for "To-Do," "Doing," and "Done" columns
+      const savedTodoTasks = JSON.parse(localStorage.getItem('todoTasks')) || [];
+      const savedDoingTasks = JSON.parse(localStorage.getItem('doingTasks')) || [];
+      const savedDoneTasks = JSON.parse(localStorage.getItem('doneTasks')) || [];
+  
+      // Initialize the "To-Do" column with saved tasks
+      savedTodoTasks.forEach((taskText) => {
+        addTask('todo', taskText);
+      });
+  
+      // Initialize the "Doing" column with saved tasks
+      savedDoingTasks.forEach((taskText) => {
+        addTask('doing', taskText);
+      });
+  
+      // Initialize the "Done" column with saved tasks
+      savedDoneTasks.forEach((taskText) => {
+        addTask('done', taskText);
+      });
+  
+      // Add task function
+      function addTask(column, taskText) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.textContent = taskText;
+  
+        card.addEventListener('click', () => {
+          if (column === 'todo') {
+            todoColumn.removeChild(card);
+            doingColumn.appendChild(card);
+            card.className = 'card doing-card'; // Change the card's class to 'doing-card'
+            savedTodoTasks.splice(savedTodoTasks.indexOf(taskText), 1);
+            savedDoingTasks.push(taskText);
+            localStorage.setItem('todoTasks', JSON.stringify(savedTodoTasks));
+            localStorage.setItem('doingTasks', JSON.stringify(savedDoingTasks));
+          } else if (column === 'doing') {
+            doingColumn.removeChild(card);
+            doneColumn.appendChild(card);
+            card.className = 'card done-card'; // Change the card's class to 'done-card'
+            savedDoingTasks.splice(savedDoingTasks.indexOf(taskText), 1);
+            savedDoneTasks.push(taskText);
+            localStorage.setItem('doingTasks', JSON.stringify(savedDoingTasks));
+            localStorage.setItem('doneTasks', JSON.stringify(savedDoneTasks));
+          }
+        });
+  
+        if (column === 'todo') {
+          todoColumn.appendChild(card);
+        } else if (column === 'doing') {
+          card.className = 'card doing-card';
+          doingColumn.appendChild(card);
+        } else {
+          card.className = 'card done-card';
+          doneColumn.appendChild(card);
+        }
+      }
+  
+      // Event listener for adding a new task in "To-Do" column
+      todoAddButton.addEventListener('click', () => {
+        const taskText = todoInput.value.trim();
+        if (taskText) {
+          addTask('todo', taskText);
+          savedTodoTasks.push(taskText);
+          localStorage.setItem('todoTasks', JSON.stringify(savedTodoTasks));
+          todoInput.value = '';
+        }
+      });
+    </script>
+  <!-- Code injected by live-server -->
+  <script>
+      // <![CDATA[  <-- For SVG support
+      if ('WebSocket' in window) {
+          (function () {
+              function refreshCSS() {
+                  var sheets = [].slice.call(document.getElementsByTagName("link"));
+                  var head = document.getElementsByTagName("head")[0];
+                  for (var i = 0; i < sheets.length; ++i) {
+                      var elem = sheets[i];
+                      var parent = elem.parentElement || head;
+                      parent.removeChild(elem);
+                      var rel = elem.rel;
+                      if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+                          var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+                          elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+                      }
+                      parent.appendChild(elem);
+                  }
+              }
+              var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+              var address = protocol + window.location.host + window.location.pathname + '/ws';
+              var socket = new WebSocket(address);
+              socket.onmessage = function (msg) {
+                  if (msg.data == 'reload') window.location.reload();
+                  else if (msg.data == 'refreshcss') refreshCSS();
+              };
+              if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+                  console.log('Live reload enabled.');
+                  sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+              }
+          })();
+      }
+      else {
+          console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+      }
+      // ]]>
+  </script>
+  
+  
+  </body></html>
