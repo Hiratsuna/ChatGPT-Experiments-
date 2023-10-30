@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="card" id="copyCard">
+        This is the text you can copy.
+    </div>
+
+    <button id="copyButton">Copy Text</button>
+
+    <script>
+        // Function to copy text to the clipboard
+        function copyTextToClipboard() {
+            const textToCopy = document.getElementById("copyCard").textContent;
+
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            document.body.appendChild(textArea);
+
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+
+            alert("Text copied to clipboard: " + textToCopy);
+        }
+
+        // Add click event listener to the card
+        const copyCard = document.getElementById("copyCard");
+        copyCard.addEventListener("click", copyTextToClipboard);
+
+        // Add click event listener to the "Copy Text" button
+        const copyButton = document.getElementById("copyButton");
+        copyButton.addEventListener("click", copyTextToClipboard);
+    </script>
+</body>
+</html>
